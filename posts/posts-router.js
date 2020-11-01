@@ -167,10 +167,16 @@ router.delete('/:id', (req, res) => {
     if (targetPost) {
         try {
             posts.remove(req.params.id)
-            .then(success => {
-                res.status(200).json({
-                    message: "post deleted"
-                })
+            .then(count => {
+                if (count > 0) {
+                    res.status(200).json({ message: "post deleted" })
+                } else {
+                    res.status(404).json({ message: "The post with the specified ID does not exist." })
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                res.status(404).json({ message: "The post with the specified ID does not exist." })
             })
         }
         catch {
